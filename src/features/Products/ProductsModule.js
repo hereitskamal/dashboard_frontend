@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Button } from 'primereact/button';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -42,18 +42,18 @@ const ProductModule = ({ companyId }) => {
     const toast = useRef(null);
     const { isDarkMode } = useTheme();
 
-    useEffect(() => {
-        loadProducts();
-    }, [companyId]);
-
-    const loadProducts = async () => {
+    const loadProducts = useCallback(async () => {
         try {
             const productsData = await fetchProducts(companyId);
             setProducts(productsData);
         } catch (error) {
             toast.current.show({ severity: 'error', summary: 'Error', detail: error.message });
         }
-    };
+    }, [companyId]);
+
+    useEffect(() => {
+        loadProducts();
+    }, [loadProducts]); // Now includes loadProducts as a dependency
 
     const handleAddProduct = async () => {
         const { name, price, sku } = productDetails;
@@ -105,6 +105,7 @@ const ProductModule = ({ companyId }) => {
             legalInfo: '',
         });
     };
+
     const handleCancel = () => {
         clearForm();
         setFormVisible(false);
@@ -136,7 +137,6 @@ const ProductModule = ({ companyId }) => {
                 />
             ) : (
                 products.length > 0 && <div className='pt-6'>
-
                     <DataTable value={products} paginator rows={10}>
                         <Column field="name" header="Name" />
                         <Column field="sku" header="SKU" />

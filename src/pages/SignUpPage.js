@@ -76,7 +76,7 @@ function SignUpPage() {
         }
 
         try {
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/signup`, formData, {
+             await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/signup`, formData, {
                 headers: { 'Content-Type': 'application/json' }
             });
             toast.current.show({ severity: 'success', summary: 'Sign Up Successful', detail: 'You can now log in!', life: 3000 });

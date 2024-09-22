@@ -1,5 +1,5 @@
 // EventModule.js
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Toast } from 'primereact/toast';
 import EventForm from './components/EventForm';
 import EventsList from './components/EventsList';
@@ -34,20 +34,21 @@ const EventModule = ({ companyId }) => {
     const toast = useRef(null);
     const { isDarkMode } = useTheme();
 
-    useEffect(() => {
-        if (companyId) {
-            fetchEvents();
-        }
-    }, [companyId]);
-
-    const fetchEvents = async () => {
+    const fetchEvents = useCallback(async () => {
         try {
             const data = await fetchCompanyEvents(companyId);
             setEvents(data);
         } catch (error) {
             toast.current.show({ severity: 'error', summary: 'Error', detail: 'Failed to fetch events' });
         }
-    };
+    }, [companyId]);
+    
+
+    useEffect(() => {
+        if (companyId) {
+            fetchEvents();
+        }
+    }, [companyId, fetchEvents]);
 
     const handleAddEvent = async () => {
         try {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { DataTable } from 'primereact/datatable';
@@ -20,11 +20,7 @@ const UserModule = ({ companyId }) => {
     const toast = useRef(null);
     const { isDarkMode } = useTheme();
 
-    useEffect(() => {
-        fetchUsers();
-    }, [companyId]);
-
-    const fetchUsers = async () => {
+    const fetchUsers = useCallback(async () => {
         try {
             const fetchedUsers = await getUsersByCompany(companyId);
             setUsers(fetchedUsers);
@@ -32,11 +28,15 @@ const UserModule = ({ companyId }) => {
             console.error(error.message);
             toast.current.show({ severity: 'error', summary: 'Error', detail: error.message });
         }
-    };
+    }, [companyId]);
+
+    useEffect(() => {
+        fetchUsers();
+    }, [fetchUsers]);
 
     const handleAddUser = async () => {
         const { companyUser, mobileNumber } = userDetails;
-        
+
         if (!companyUser || !mobileNumber) {
             toast.current.show({ severity: 'error', summary: 'Error', detail: 'Name and Mobile number are required' });
             return;

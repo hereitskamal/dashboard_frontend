@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Avatar } from 'primereact/avatar';
 import { useTheme } from '../../contexts/ThemeContext';
 import { Dialog } from 'primereact/dialog';
 import UserDetailsForm from './UserDetailsForm';
-import CompanyForm from '../../moduleComponent/CompanyForm'; // Import CompanyForm component
 
 const Navbar = ({ company}) => {
   const { isDarkMode, toggleTheme } = useTheme();

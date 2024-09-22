@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from 'primereact/button';
 import { Menu } from 'primereact/menu';
-import { Avatar } from 'primereact/avatar';
 import { useTheme } from '../contexts/ThemeContext';
 
 const Sidebar = ({ company, onSelectModule, modules }) => {

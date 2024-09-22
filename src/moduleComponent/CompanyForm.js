@@ -5,7 +5,7 @@ import { MultiSelect } from 'primereact/multiselect';
 import { Calendar } from 'primereact/calendar';
 import { Dropdown } from 'primereact/dropdown';
 import { Toast } from 'primereact/toast';
-import { createCompany, fetchAllCompanies, fetchAllModules } from '../services/api';
+import { createCompany, fetchAllModules } from '../services/api';
 
 const numberOfEmployeesOptions = [
   { label: '0-10', value: '0-10' },
