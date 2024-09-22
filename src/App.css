@@ -1,0 +1,27 @@
+/* src/App.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global body styles */
+body {
+  @apply bg-gray-100 text-gray-900 text-sm; /* Set base font size */
+}
+
+/* Dark mode adjustments */
+.dark-mode {
+  @apply bg-gray-900 text-gray-100;
+}
+
+/* Dark mode specific adjustments for elements */
+.dark-mode .p-inputtext {
+  @apply bg-gray-800 text-gray-100 border-gray-700 text-sm; /* Smaller font size for inputs */
+}
+
+.dark-mode .p-button {
+  @apply text-gray-300 text-sm; /* Smaller font size for buttons */
+}
+
+.dark-mode .p-dialog {
+  @apply bg-gray-800 text-sm; /* Smaller font size for dialogs */
+}
