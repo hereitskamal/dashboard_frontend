@@ -7,8 +7,8 @@ import { Checkbox } from 'primereact/checkbox';
 import axios from 'axios';
 
 function LoginPage() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('kamal@gmail.com');
+  const [password, setPassword] = useState('Kamal@123');
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
   const toast = React.useRef(null);

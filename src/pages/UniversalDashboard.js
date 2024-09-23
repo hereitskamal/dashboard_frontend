@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import ModuleComponent from '../moduleComponent/ModuleComponent';
-import Navbar from '../components/navbar/Navbar'; 
+import Navbar from '../components/navbar/Navbar';
 import Sidebar from '../components/Sidebar';
 import { useTheme } from '../contexts/ThemeContext';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { fetchAllCompanies, fetchAllModules, fetchCompanyById, fetchCompanyModules } from '../services/api';
+import { Sidebar as PrimeSidebar } from 'primereact/sidebar'; // Import PrimeReact Sidebar
 
 const UniversalDashboard = () => {
   const { companyId } = useParams();
@@ -15,6 +16,7 @@ const UniversalDashboard = () => {
   const { isDarkMode } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
+  const [isMobileSidebarVisible, setMobileSidebarVisible] = useState(false); // PrimeReact Sidebar visibility state for mobile
   const _Id = "";
 
   useEffect(() => {
@@ -22,7 +24,7 @@ const UniversalDashboard = () => {
     const userData = sessionData ? JSON.parse(sessionData) : {};
     const registrationType = userData.registrationType;
     const _Id = userData.companyId;
-    
+
     if (registrationType !== 'K_%%110_%%545' && _Id !== "") {
       fetchCompanyData(_Id);
     }
@@ -94,18 +96,46 @@ const UniversalDashboard = () => {
     navigate(`/${newCompany._id}`);
   };
 
+  const toggleMobileSidebar = () => {
+    setMobileSidebarVisible(!isMobileSidebarVisible); // Toggle PrimeReact sidebar visibility for mobile
+  };
+
   return (
     <div className="flex flex-col h-screen">
-      <Navbar company={company}/>
+      <Navbar company={company} />
       <div className="flex flex-1">
-        {company && (
-          <Sidebar
-            company={company}
-            onSelectModule={setSelectedModule}
-            modules={modules}
-          />
-        )}
-        <main className={`flex-1 p-6 ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-800'}`}>
+        {/* Mobile sidebar button */}
+
+        {/* PrimeReact Sidebar for mobile screens */}
+        <PrimeSidebar visible={isMobileSidebarVisible} onHide={() => setMobileSidebarVisible(false)}>
+          {company && (
+            <Sidebar
+              company={company}
+              onSelectModule={setSelectedModule}
+              modules={modules}
+            />
+          )}
+        </PrimeSidebar>
+
+        {/* Regular sidebar for larger screens */}
+        <div className="hidden md:block">
+          {company && (
+            <Sidebar
+              company={company}
+              onSelectModule={setSelectedModule}
+              modules={modules}
+            />
+          )}
+        </div>
+
+        <main className={`flex-1 p-6 pt-2 ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-800'}`}>
+          {company && (
+            <i
+              className="pi pi-bars bg-white shadow-sm block md:hidden p-2 rounded-full p-4 h-12 w-12"
+              onClick={toggleMobileSidebar}
+            ></i>
+          )}
+
           {company ? (
             selectedModule ? (
               <ModuleComponent
@@ -128,7 +158,7 @@ const UniversalDashboard = () => {
               modulesCount={modules.length}
               companiesCount={companies.length}
               modules={modules}
-              onCompanyCreated={handleCompanyCreated} // Ensure this prop is passed
+              onCompanyCreated={handleCompanyCreated}
             />
           )}
         </main>
@@ -138,4 +168,3 @@ const UniversalDashboard = () => {
 };
 
 export default UniversalDashboard;
-

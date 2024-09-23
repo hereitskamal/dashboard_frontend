@@ -69,7 +69,7 @@ const ModuleComponent = ({
   };
 
   return (
-    <div className="flex-1 p-2 px-6">
+    <div className="flex-1 px-1 py-2 sm:px-6">
       {/* Overview Section */}
 
 
@@ -142,9 +142,8 @@ const ModuleComponent = ({
           <Dialog
             header="Create a New Company"
             visible={isCreateCompanyOpen}
-            style={{ width: '50vw' }}
+            className="p-dialog p-component w-9/10 md:w-1/2"
             onHide={() => setCreateCompanyOpen(false)}
-            className="p-dialog p-component"
           >
             <CompanyForm setCompany={handleCompanyCreation} />
           </Dialog>
