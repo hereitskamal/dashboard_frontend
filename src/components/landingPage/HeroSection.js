@@ -21,7 +21,7 @@ const HeroSection = () => {
           </p>
           <div className="flex space-x-4">
             <Link to="/login" className="inline-block px-8 py-4 text-white bg-gradient-to-r from-blue-500 to-purple-600 rounded-full shadow-lg hover:bg-blue-700 transition">
-              Login
+              Login (click for demo)
             </Link>
             <Link to="/signup" className="inline-block px-8 py-4 text-blue-600 bg-white border border-blue-600 rounded-full shadow-lg hover:bg-blue-600 hover:text-white transition">
               Sign Up
