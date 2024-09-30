@@ -55,7 +55,7 @@ const FeaturesSection = () => {
 
   return (
     <section className="bg-white py-8">
-      <div className="container mx-auto px-4 pt-4 pb-12">
+      <div className="container mx-auto pt-4 pb-12">
         <h2 className="text-4xl font-bold text-center text-purple-600 mb-6">Key Features</h2>
         <div className="w-full mb-6">
           <div className="h-1 mx-auto bg-gradient-to-r from-purple-500 to-blue-500 w-32 opacity-25 rounded"></div>

@@ -7,7 +7,7 @@ const HeroSection = () => {
   return (
     <div className="relative px-12 flex h-[100vh] w-full">
       {/* Top corner text */}
-      <div className="absolute top-4 left-4 rounded-l-full rounded-r-full text-white bg-gradient-to-r from-blue-500 to-purple-400 flex p-2 pr-8">
+      <div className="absolute top-4 left:4 md:left-16 rounded-l-full rounded-r-full text-white bg-gradient-to-r from-blue-500 to-purple-400 flex p-2 pr-8">
       <i className="pi pi-slack text-2xl text-white">&nbsp;</i> <h2 className="text-2xl font-bold text-white">Ultimate Dashboard</h2>
       </div>
 
