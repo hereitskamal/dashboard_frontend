@@ -51,7 +51,7 @@ function LoginPage() {
       }
 
       clearInterval(interval); // Clear the interval
-      setProgress(100); // Set progress to 100% when login is successful
+      setProgress(99); // Set progress to 100% when login is successful
       toast.current.show({ severity: 'success', summary: 'Login Successful', detail: 'Welcome back!', life: 3000 });
       navigate('/dashboard'); // Redirect to dashboard on successful login
     } catch (error) {
