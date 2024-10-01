@@ -17,7 +17,7 @@ const CompanyCard = ({ company, onClick }) => {
   return (
     <div className="col-12 md:col-6 lg:col-4 ">
       <div
-        className={` ${isDarkMode ? "bg-gray-800 text-gray-50" : "bg-white text-gray-800"} shadow-sm rounded-lg cursor-pointer hover:shadow-xl transition-shadow p-5`}
+        className={` ${isDarkMode ? "bg-gray-800 text-gray-50" : "bg-white text-gray-800"} lg:max-w-[220px] shadow-sm rounded-lg cursor-pointer hover:shadow-xl transition-shadow p-5`}
         onClick={handleClick}
       >
         {/* Company Header */}

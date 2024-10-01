@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import UserModule from '../features/Users/UserModule';
 import ProductsModule from '../features/Products/ProductsModule';
 import EventModule from '../features/Events/EventModule';
@@ -27,8 +28,8 @@ const ModuleComponent = ({
   const [selectedTag, setSelectedTag] = useState('company');
   const { isDarkMode } = useTheme();
   const [isCreateCompanyOpen, setCreateCompanyOpen] = useState(false);
-  const [isFirstRender, setIsFirstRender] = useState(true);
   const [showOverlay, setShowOverlay] = useState(false);
+  const [companyList, setCompanyList] = useState(companies);
 
   const handleFormClose = () => {
     setIsFormVisible(false);
@@ -42,6 +43,16 @@ const ModuleComponent = ({
   const handleCompanyCreation = (newCompany) => {
     setCreateCompanyOpen(false);
     onCompanyCreated(newCompany);
+  };
+
+  const handleDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const reorderedCompanies = Array.from(companyList);
+    const [removed] = reorderedCompanies.splice(result.source.index, 1);
+    reorderedCompanies.splice(result.destination.index, 0, removed);
+    
+    setCompanyList(reorderedCompanies);
   };
 
   const renderModuleContent = () => {
@@ -73,21 +84,6 @@ const ModuleComponent = ({
           </Card>
         );
     }
-  };
-
-  useEffect(() => {
-    if (isFirstRender) {
-      setShowOverlay(true);
-      const timer = setTimeout(() => {
-        setIsFirstRender(false);
-        setShowOverlay(false);
-      }, 20000);
-      return () => clearTimeout(timer);
-    }
-  }, [isFirstRender]);
-
-  const handleOverlayClick = () => {
-    setShowOverlay(false);
   };
 
   return (
@@ -138,47 +134,68 @@ const ModuleComponent = ({
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                  {selectedTag === 'company' ? (
-                    <>
-                      <div>
-                        {/* Overlay */}
-                        {showOverlay && (
-                          <div
-                            className="absolute -left-[30px] -top-[70px]  md:-left-[48px] md:-top-[70px] h-full w-[100vw] md:h-[100vh] bg-blue-400 opacity-50 z-10"
-                            onClick={handleOverlayClick}
-                          />
-                        )}
+                <DragDropContext onDragEnd={handleDragEnd}>
+                  <Droppable droppableId="companies">
+                    {(provided) => (
+                      <div
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        className="flex flex-wrap gap-4"
+                      >
+                        {selectedTag === 'company' ? (
+                          <>
+                            <div>
+                              {/* Overlay */}
+                              {showOverlay && (
+                                <div
+                                  className="absolute -left-[30px] -top-[70px] md:-left-[48px] md:-top-[70px] h-full w-[100vw] md:h-[100vh] bg-blue-400 opacity-50 z-10"
+                                  onClick={() => setShowOverlay(false)}
+                                />
+                              )}
 
-                        {/* Add Company Card */}
-                        <div className="relative z-20">
-                          <AddCompanyCard onClick={handleCreateCompanyClick} />
-                          {showOverlay && (
-                            <div className="absolute top-0 left-0 transform -translate-y-8 bg-green-500 text-white border p-2 rounded shadow-md">
-                              Click to create new company
+                              {/* Add Company Card */}
+                              <div className="relative z-20">
+                                <AddCompanyCard onClick={handleCreateCompanyClick} />
+                                {showOverlay && (
+                                  <div className="absolute top-0 left-0 transform -translate-y-8 bg-green-500 text-white border p-2 rounded shadow-md">
+                                    Click to create new company
+                                  </div>
+                                )}
+                              </div>
                             </div>
-                          )}
-                        </div>
+                            {companyList.map((company, index) => (
+                              <Draggable key={company._id} draggableId={company._id} index={index}>
+                                {(provided) => (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    className="lg:max-w-[220px] w-full md:w-1/4 lg:w-1/6"
+                                  >
+                                    <CompanyCard
+                                      company={company}
+                                      onClick={onCompanySelect}
+                                      isDarkMode={isDarkMode}
+                                    />
+                                  </div>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+                          </>
+                        ) : (
+                          modules.map((moduleItem) => (
+                            <ModuleCard
+                              key={moduleItem._id}
+                              module={moduleItem}
+                              isDarkMode={isDarkMode}
+                            />
+                          ))
+                        )}
                       </div>
-                      {companies.map((company) => (
-                        <CompanyCard
-                          key={company._id}
-                          company={company}
-                          onClick={onCompanySelect}
-                          isDarkMode={isDarkMode}
-                        />
-                      ))}
-                    </>
-                  ) : (
-                    modules.map((moduleItem) => (
-                      <ModuleCard
-                        key={moduleItem._id}
-                        module={moduleItem}
-                        isDarkMode={isDarkMode}
-                      />
-                    ))
-                  )}
-                </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
               </>
             )}
           </div>
