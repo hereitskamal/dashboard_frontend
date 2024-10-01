@@ -19,8 +19,8 @@ function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!username || !password) {
-      toast.current.show({ severity: 'warn', summary: 'Input Required', detail: 'Please enter both email and password', life: 3000 });
-      return;
+        toast.current.show({ severity: 'warn', summary: 'Input Required', detail: 'Please enter both email and password', life: 3000 });
+        return;
     }
 
     setLoading(true);
@@ -28,41 +28,53 @@ function LoginPage() {
 
     // Simulating progress
     const interval = setInterval(() => {
-      setProgress((oldProgress) => {
-        if (oldProgress >= 90) {
-          clearInterval(interval);
-          return 100; // End progress at 100%
-        }
-        return Math.min(oldProgress + 10, 90); // Max progress 90% during request
-      });
+        setProgress((oldProgress) => {
+            if (oldProgress >= 90) {
+                clearInterval(interval);
+                return 100; // End progress at 100%
+            }
+            return Math.min(oldProgress + 10, 90); // Max progress 90% during request
+        });
     }, 200);
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
-        email: username,
-        password: password
-      });
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
+            email: username,
+            password: password
+        }, {
+            onUploadProgress: (progressEvent) => {
+                const { loaded, total } = progressEvent;
+                const percentage = Math.floor((loaded * 100) / total);
+                setProgress(percentage); // Update progress based on upload
+            },
+            onDownloadProgress: (progressEvent) => {
+                const { loaded, total } = progressEvent;
+                const percentage = Math.floor((loaded * 100) / total);
+                setProgress(percentage); // Update progress based on download
+            }
+        });
 
-      const { token, user } = response.data;
+        const { token, user } = response.data;
 
-      if (token && user) {
-        sessionStorage.setItem('token', token);
-        sessionStorage.setItem('user', JSON.stringify(user));
-      }
+        if (token && user) {
+            sessionStorage.setItem('token', token);
+            sessionStorage.setItem('user', JSON.stringify(user));
+        }
 
-      clearInterval(interval); // Clear the interval
-      setProgress(99); // Set progress to 100% when login is successful
-      toast.current.show({ severity: 'success', summary: 'Login Successful', detail: 'Welcome back!', life: 3000 });
-      navigate('/dashboard'); // Redirect to dashboard on successful login
+        clearInterval(interval); // Clear the interval
+        setProgress(100); // Set progress to 100% when login is successful
+        toast.current.show({ severity: 'success', summary: 'Login Successful', detail: 'Welcome back!', life: 3000 });
+        navigate('/dashboard'); // Redirect to dashboard on successful login
     } catch (error) {
-      clearInterval(interval); // Clear the interval
-      setLoading(false);
-      const errorMsg = error.response?.data?.message || 'An unexpected error occurred';
-      toast.current.show({ severity: 'error', summary: 'Login Failed', detail: errorMsg, life: 3000 });
+        clearInterval(interval); // Clear the interval
+        setLoading(false);
+        const errorMsg = error.response?.data?.message || 'An unexpected error occurred';
+        toast.current.show({ severity: 'error', summary: 'Login Failed', detail: errorMsg, life: 3000 });
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">

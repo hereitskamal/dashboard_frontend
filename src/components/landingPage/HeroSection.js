@@ -15,7 +15,7 @@ const HeroSection = () => {
         <div className="flex flex-col max-w-[500px]">
           <h1 className="text-5xl font-extrabold text-indigo-500 mb-4">Welcome to</h1>
           <h1 className="text-5xl text-purple-500 font-extrabold mb-4">Universal Dashboard</h1>
-          <p className="py-4 mb-6">
+          <p className="py-4 mb-6 text-orange-600">
             Manage your websites and databases effortlessly with our intuitive platform. 
             Gain insights, streamline workflows, and enhance productivity with powerful tools designed for everyone.
           </p>

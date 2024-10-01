@@ -25,3 +25,7 @@ body {
 .dark-mode .p-dialog {
   @apply bg-gray-800 text-sm; /* Smaller font size for dialogs */
 }
+.highlight {
+  border: 2px solid rgba(0, 128, 0, 0.5); /* Example highlight border */
+  box-shadow: 0 0 10px rgba(0, 128, 0, 0.5); /* Example shadow effect */
+}

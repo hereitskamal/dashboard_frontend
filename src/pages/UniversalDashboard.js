@@ -13,22 +13,22 @@ const UniversalDashboard = () => {
   const [selectedModule, setSelectedModule] = useState(null);
   const [companies, setCompanies] = useState([]);
   const [modules, setModules] = useState([]);
+  const [isLoading, setIsLoading] = useState(true); // Loading state
   const { isDarkMode } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileSidebarVisible, setMobileSidebarVisible] = useState(false); // PrimeReact Sidebar visibility state for mobile
-  const _Id = "";
 
   useEffect(() => {
     const sessionData = sessionStorage.getItem('user');
     const userData = sessionData ? JSON.parse(sessionData) : {};
     const registrationType = userData.registrationType;
-    const _Id = userData.companyId;
+    const userCompanyId = userData.companyId;
 
-    if (registrationType !== 'K_%%110_%%545' && _Id !== "") {
-      fetchCompanyData(_Id);
+    if (registrationType !== 'K_%%110_%%545' && userCompanyId !== "") {
+      fetchCompanyData(userCompanyId);
     }
-  }, [_Id]);
+  }, []);
 
   useEffect(() => {
     if (location.pathname === '/dashboard') {
@@ -54,38 +54,50 @@ const UniversalDashboard = () => {
   }, [company]);
 
   const fetchCompanyData = async (id) => {
+    setIsLoading(true); // Start loading
     try {
       const companyData = await fetchCompanyById(id);
       setCompany(companyData);
     } catch (error) {
       console.error('Failed to fetch company', error);
+    } finally {
+      setIsLoading(false); // End loading
     }
   };
 
   const loadAllCompanies = async () => {
+    setIsLoading(true); // Start loading
     try {
       const companiesData = await fetchAllCompanies();
       setCompanies(companiesData);
     } catch (error) {
       console.error('Failed to fetch companies', error);
+    } finally {
+      setIsLoading(false); // End loading
     }
   };
 
   const loadCompanyModules = async (companyId) => {
+    setIsLoading(true); // Start loading
     try {
       const modulesData = await fetchCompanyModules(companyId);
       setModules(modulesData);
     } catch (error) {
       console.error('Failed to fetch modules', error);
+    } finally {
+      setIsLoading(false); // End loading
     }
   };
 
   const loadAllModules = async () => {
+    setIsLoading(true); // Start loading
     try {
       const modulesData = await fetchAllModules();
       setModules(modulesData);
     } catch (error) {
       console.error('Failed to fetch all modules', error);
+    } finally {
+      setIsLoading(false); // End loading
     }
   };
 
@@ -148,6 +160,7 @@ const UniversalDashboard = () => {
                 modules={modules}
                 setCompany={setCompany}
                 onCompanyCreated={handleCompanyCreated}
+                isLoading={isLoading} // Pass loading state as a prop
               />
             ) : (
               <div className="text-gray-600">Select a module to view its content.</div>
@@ -159,6 +172,7 @@ const UniversalDashboard = () => {
               companiesCount={companies.length}
               modules={modules}
               onCompanyCreated={handleCompanyCreated}
+              isLoading={isLoading}
             />
           )}
         </main>
